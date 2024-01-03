@@ -9,7 +9,7 @@ var crudRouter=require('./routes/CRUDroutes')
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use('/prueba',crudRouter)
+app.use('/CRUD',crudRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World from AWS!')

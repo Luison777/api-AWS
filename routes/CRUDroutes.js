@@ -1,28 +1,62 @@
 var express = require('express');
 var router = express.Router();
-const { Client } = require('pg');
+const{prueba,create,update,readTable,deleteData}=require('../db/CRUDfunctions')
 
-router.get('/', async function(req, res, next) {
-    const client = new Client({
-        user: process.env.RDS_USERNAME,
-        host: process.env.RDS_HOSTNAME,
-        database: process.env.RDS_DB_NAME,
-        password: process.env.RDS_PASSWORD,
-        port: process.env.RDS_PORT,
+router.get('/prueba',function(req,res,next){
+    prueba((err,result)=>{
+        if (err){
+            console.log(err);
+            return res.status(500).send('Error al hacerla prueba.'+err); 
+        }
+        res.send(result);
+    })
+} );
+
+router.get('/:tableName', function(req,res,next){
+    const tableName=req.params.tableName;
+    readTable(tableName,(err,result)=>{
+        if (err){
+            console.log(err);
+            return res.status(500).send(err); 
+        }
+        res.send(result);
+    })
+})
+
+router.post('/:tableName', function (req, res, next) {
+    const tableName = req.params.tableName;
+    const item=req.body;
+    
+    create(tableName,item,(err,result)=>{
+      if(err){
+        return next(err);
+      }
+      res.send(result);
     });
-       
-    try {
-        await client.connect();
-           
-        const result = await client.query('SELECT NOW()');
-        console.log(result.rows); // Resultado de la consulta
-        
-        await client.end();
-        res.send('Consulta exitosa'); // Enviar respuesta al cliente
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).send('Error al consultar la base de datos'); // Enviar respuesta de error al cliente
-    }
-});
+  });
+
+  router.put('/:tableName/:index',  function (req, res, next) {
+    const tableName = req.params.tableName;
+    const index = req.params.index;
+    const item=req.body;
+    update(tableName,index,item,(err,actualiced)=>{
+      if(err){
+        return next(err);
+      }
+      res.send(actualiced);
+    });
+  });
+
+  router.delete('/:tableName/:index', function(req, res, next) {
+    const tableName = req.params.tableName;
+    const index = req.params.index;
+
+    deleteData(tableName,index,(err,deleted)=>{
+        if(err){
+          return next(err);
+        }
+        res.send(deleted);
+      });
+  });
 
 module.exports = router;
