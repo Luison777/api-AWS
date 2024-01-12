@@ -1,16 +1,7 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 
-/* const pool = new Pool({
-    user: 'username',
-    host: 'awseb-e-gm2ushduuq-stack-awsebrdsdatabase-7s6xoab2auew.c9qggycuc5il.us-east-2.rds.amazonaws.com',
-    database: 'ebdb',
-    password: 'Lapf80204318#',
-    port: '5432',
-     ssl: {
-        ca: fs.readFileSync('./CA/global-bundle.pem').toString(),
-    }
-}); */
+
 /* const pool = new Pool({
     user: 'postgres',
     host: 'localhost',

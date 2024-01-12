@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const{prueba,create,update,readTable,deleteData}=require('../db/CRUDfunctions')
+const{prueba,create,update,readTable,deleteData,updateSection}=require('../db/CRUDfunctions')
 
 router.get('/prueba',function(req,res,next){
     prueba((err,result)=>{
@@ -46,7 +46,18 @@ router.post('/:tableName', function (req, res, next) {
       res.send(actualiced);
     });
   });
-
+  router.put('/:oldName/:newName/:index',  function (req, res, next) {
+    const oldName=req.params.oldName;
+    const newName=req.params.newName;
+    const index = req.params.index;
+    const item=req.body;
+    updateSection(oldName,newName,item,index,(err,actualiced)=>{
+      if(err){
+        return next(err);
+      }
+      res.send(actualiced);
+    });
+  });
   router.delete('/:tableName/:index', function(req, res, next) {
     const tableName = req.params.tableName;
     const index = req.params.index;
